@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
-import simpleAgent from 'simple-agent';
 
 import logo from './logo.svg';
 import './App.css';
+
+import Agent from './Agent';
+
 class App extends Component {
   render() {
 
-    simpleAgent();
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>
+        <Agent />
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
