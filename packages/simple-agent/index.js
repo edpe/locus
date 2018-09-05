@@ -1,10 +1,9 @@
 const Tone = require("./node_modules/tone/build/Tone.js");
 
 class Agent {
-  constructor(loop, instrument) {
+  constructor(instrument, loop) {
     this.instrument = instrument;
     this.loop = loop
-    console.log(this.loop)
   }
 
   playNote(note, length) {

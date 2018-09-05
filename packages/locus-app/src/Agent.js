@@ -7,8 +7,9 @@ import Instrument from 'instrument';
 export default class AgentWrapper extends Component {
   constructor(props) {
     super(props);
-
-    this.agentEd = new Agent(new Loop("C1", "8n"), new Instrument());
+//instruments should have behaviours which can be loops, chords or patterns etc.
+//it is up to the agent to make the selection of what the instrument should do
+    this.agentEd = new Agent(new Instrument(), new Loop("C1", "4n"));
 
   }
 
@@ -21,7 +22,6 @@ export default class AgentWrapper extends Component {
       <div>
         <pre>
           {this.agentEd.playNote('C4', '16n')}
-          {this.agentEd.playLoop()}
         </pre>
       </div>
     );
