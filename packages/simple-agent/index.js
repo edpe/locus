@@ -1,26 +1,24 @@
-const Tone = require('./node_modules/tone/build/Tone.js')
+const Tone = require("./node_modules/tone/build/Tone.js");
 
 class Agent {
-    constructor(options) {
-      this.synth = new Tone.Synth
-      this.synth.toMaster()
-    }
+  constructor(loop, instrument) {
+    this.instrument = instrument;
+    this.loop = loop
+    console.log(this.loop)
+  }
 
-    playNote(note, length) {
-      this.synth.triggerAttackRelease(note, length)
-    }
+  playNote(note, length) {
+    this.instrument.triggerAttackRelease(note, length);
+  }
 
-    doThing() {
-      console.log(this.synth);
+  playLoop(start, end) {
+    this.loop.play(start, end)
+  }
 
-      return {
-        some: 'thing'
-      };
-    }
 
-    cleanup() {
-      console.log('ive removed stuff');
-    }
+  cleanup() {
+    console.log("ive removed stuff");
+  }
 }
 
 module.exports = Agent;

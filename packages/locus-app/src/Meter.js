@@ -17,6 +17,7 @@ export default class MeterWrapper extends Component {
     return (
       <div>
         <pre>
+        {JSON.stringify(this.meter.setBPM(80), null, '  ')}
           {JSON.stringify(this.meter.start(), null, '  ')}
         </pre>
       </div>

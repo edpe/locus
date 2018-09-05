@@ -7,7 +7,9 @@
     "react-dom": "16.4.2",
     "react-scripts": "1.1.5",
     "simple-agent": "1.0.0",
-    "meter": "1.0.0"
+    "meter": "1.0.0",
+    "loop": "1.0.0",
+    "instrument": "1.0.0"
   },
   "scripts": {
     "start": "react-scripts start",

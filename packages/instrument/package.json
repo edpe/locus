@@ -1,0 +1,8 @@
+{
+  "name": "instrument",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "tone": "0.12.80"
+  }
+}
