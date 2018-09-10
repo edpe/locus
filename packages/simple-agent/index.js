@@ -1,19 +1,29 @@
-const Tone = require("./node_modules/tone/build/Tone.js");
+const { Synth, Loop } = require("tone");
+
+require('tone').Transport.start(0)
+
+const polySynth = new Tone.PolySynth(6, Tone.Synth).toMaster();
+
 
 class Agent {
-  constructor(instrument, loop) {
-    this.instrument = instrument;
-    this.loop = loop
+  constructor(options) {
+    this.instrument = synth;
+    this.loops = [];
   }
 
-  playNote(note, length) {
-    this.instrument.triggerAttackRelease(note, length);
+  addLoop(note, length, loopInterval) {
+    this.loops.push(
+      new Loop(function(time) {
+        synth.triggerAttackRelease(note, length, time);
+      }, loopInterval)
+    );
   }
 
-  playLoop(start, end) {
-    this.loop.play(start, end)
-  }
 
+
+  playLoop(loopIndex, start, end) {
+    this.loops[loopIndex].start(start).stop(end);
+  }
 
   cleanup() {
     console.log("ive removed stuff");

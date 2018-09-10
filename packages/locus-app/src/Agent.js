@@ -1,27 +1,26 @@
 import React, { Component } from 'react';
 import Agent from 'simple-agent';
-import Loop from 'loop';
-import Instrument from 'instrument';
+// import Tone from 'tone';
+
 
 // pull in graphing/waveform lib
 export default class AgentWrapper extends Component {
-  constructor(props) {
-    super(props);
-//instruments should have behaviours which can be loops, chords or patterns etc.
-//it is up to the agent to make the selection of what the instrument should do
-    this.agentEd = new Agent(new Instrument(), new Loop("C1", "4n"));
-
+  componentDidMount() {
+    this.agentEd = new Agent();
+    this.agentEd.addLoop("C2", "16n", "8n"); //note, length, loop interval
+    this.agentEd.playLoop(0, 0, "8m"); // loop number, start time, end time
   }
 
   componentWillUnmount() {
-    this.agent.cleanup();
+    this.agentEd.cleanup();
   }
+
+
 
   render() {
     return (
       <div>
         <pre>
-          {this.agentEd.playNote('C4', '16n')}
         </pre>
       </div>
     );
