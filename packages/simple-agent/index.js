@@ -1,25 +1,40 @@
-const { Synth, Loop } = require("tone");
+const { Synth, Loop, PolySynth, Pattern } = require("tone");
 
-require('tone').Transport.start(0)
+require("tone").Transport.start(0);
 
-const polySynth = new Tone.PolySynth(6, Tone.Synth).toMaster();
-
+const polySynth = new PolySynth(6, Synth).toMaster();
 
 class Agent {
   constructor(options) {
-    this.instrument = synth;
+    this.instrument = polySynth;
     this.loops = [];
+    this.patterns = [];
   }
 
   addLoop(note, length, loopInterval) {
     this.loops.push(
       new Loop(function(time) {
-        synth.triggerAttackRelease(note, length, time);
+        polySynth.triggerAttackRelease(note, length, time);
       }, loopInterval)
     );
   }
 
+  addPattern(notes, order) {
+    this.patterns.push(
+      new Pattern(
+        function(note, time) {
+          polySynth.triggerAttackRelease(note, "8n", time);
+        },
+        notes,
+        order
+      )
+    );
+  }
 
+  playPattern(patternIndex, start, end) {
+    this.patterns[patternIndex].start(start).stop(end);
+    console.log(this.patterns[patternIndex]);
+  }
 
   playLoop(loopIndex, start, end) {
     this.loops[loopIndex].start(start).stop(end);
