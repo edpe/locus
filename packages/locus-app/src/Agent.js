@@ -1,26 +1,25 @@
-import React, { Component } from 'react';
-import Agent from 'simple-agent';
+import React, { Component } from "react";
+import Agent from "simple-agent";
 
 // pull in graphing/waveform lib
 export default class AgentWrapper extends Component {
-  constructor(props) {
-    super(props);
-
-    this.agentEd = new Agent({ name: 'ed'});
-    this.agentRob = new Agent({ name: 'rob'});
+  componentDidMount() {
+    this.agentEd = new Agent();
+    console.log(this.agentEd);
+    // this.agentEd.addLoop("C2", "16n", "8n"); //note, length, loop interval
+    // this.agentEd.playLoop(0, 0, "8m"); // loop number, start time, end time
+    this.agentEd.addPattern(["A4", "B4", "C5", "D5"], "up", "16n");
+    this.agentEd.playPattern(0, 0, "4m"); // notes array, order/pattern
   }
 
   componentWillUnmount() {
-    this.agent.cleanup();
+    this.agentEd.cleanup();
   }
 
   render() {
     return (
       <div>
-        <pre>
-          {JSON.stringify(this.agentEd.playNote('C4', '8n'), null, '  ')}
-          {JSON.stringify(this.agentRob.playNote('G4', '8n'), null, '  ')}
-        </pre>
+        <pre />
       </div>
     );
   }
