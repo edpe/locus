@@ -19,13 +19,12 @@ class Agent {
     );
   }
 
-  addPattern(notes, order) {
+  addPattern(notes, order, length) {
     this.patterns.push(
       new Pattern(
-        function(note, time) {
-          polySynth.triggerAttackRelease(note, "8n", time);
-        },
-        notes,
+        function(time, note) {
+          polySynth.triggerAttackRelease(note, length)
+        },notes,
         order
       )
     );
