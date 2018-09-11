@@ -23,8 +23,9 @@ class Agent {
     this.patterns.push(
       new Pattern(
         function(time, note) {
-          polySynth.triggerAttackRelease(note, length)
-        },notes,
+          polySynth.triggerAttackRelease(note, length);
+        },
+        notes,
         order
       )
     );
