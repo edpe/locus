@@ -63,7 +63,7 @@ class Agent {
     this.chords.push(
       new Event(function(time, note) {
         polySynth.triggerAttackRelease(note, "1n", time,  0.5);
-      }, chordNotes)
+      }, chordNotes)   
 
     );
   }
