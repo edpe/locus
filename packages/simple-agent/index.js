@@ -31,6 +31,10 @@ class Agent {
     require("tone").Transport.stop();
   }
 
+  pauseTransport() {
+    require("tone").Transport.pause();
+  }
+
   setBPM(bpm) {
     require("tone").Transport.bpm.value = bpm;
   }
