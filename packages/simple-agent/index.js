@@ -22,14 +22,22 @@ class Agent {
   }
 
   startTransport() {
-    require("tone").Transport.bpm.value = 160;
-      require("tone").Transport.start(0);
+    console.log("called from inside agent")
+      require("tone").Transport.start();
+      console.log(require("tone").Transport)
     }
+
+  stopTransport() {
+    require("tone").Transport.stop();
+  }
+
+  setBPM(bpm) {
+    require("tone").Transport.bpm.value = bpm;
+  }
 
   addLoop(note, length, loopInterval) {
     this.loops.push(
       new Loop(function(time) {
-        console.log("loop", note, time);
         synth.triggerAttackRelease(note, length, time, 0.5);
       }, loopInterval)
     );
@@ -39,7 +47,6 @@ class Agent {
     this.patterns.push(
       new Pattern(
         function(time, note) {
-          console.log("pattern", note, time);
           polySynth.triggerAttackRelease(note, length);
         },
         notes,
@@ -51,12 +58,10 @@ class Agent {
   addChord(chordNotes, length) {
     this.chords.push(
       new Event(function(time, note) {
-        console.log("chord", time, note);
         polySynth.triggerAttackRelease(note, "1n", time,  0.5);
       }, chordNotes)
 
     );
-      console.log(this.chords)
   }
 
   playPattern(patternIndex, start, end) {
@@ -75,14 +80,12 @@ class Agent {
 
   logTransport1() {
     require("tone").Transport.scheduleRepeat(function(time) {
-      console.log("logging transport1", time);
       cymbal.triggerAttackRelease();
     }, "4n");
   }
 
   logTransport2() {
     require("tone").Transport.scheduleRepeat(function(time) {
-      console.log("logging transport2", time);
     }, "8n");
   }
 }
