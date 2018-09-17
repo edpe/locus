@@ -38,21 +38,22 @@ export default class AgentWrapper extends Component {
   }
 
   componentDidMount() {
-    this.agentEd.addLoop("C2", "8n", "4n"); //note, length, loop interval
-    this.agentEd.addChord(["A2", "C3", "E3", "A3"], "16n");
-    this.agentEd.addChord(["A3", "C4", "E4", "A4"], "16n");
+    // this.agentEd.addLoop("C2", "8n", "4n"); //note, length, loop interval
+    // this.agentEd.addChord(["A2", "C3", "E3", "A3"], "16n");
+    // this.agentEd.addChord(["A3", "C4", "E4", "A4"], "16n");
     this.agentEd.addPattern(
-      ["C5", "D5", "E5", "F5", "G5", "A5", "B5", "C6"],
+      8, 5,
       "up",
       "8n"
     ); //notes to play, order to play them in, length of notes
-    this.agentEd.addPattern(["C5", "G4", "E3", "C4"], "up", "4n");
+    // this.agentEd.addPattern(["C5", "G4", "E3", "C4"], "up", "4n");
 
     //   this.agentEd.playLoop(0, 0, "4m"); // loop number, start time, end time
     // this.agentEd.playChord(0, 0, 4, "1m"); // chord index, start, repeats, length
     // this.agentEd.playChord(1, 0, 4, "1m"); // chord index, start, repeats, length
     this.agentEd.playPattern(0, 0, "8m"); // index of patern to play, start point, end point(bars/measures)
     // this.agentEd.playPattern(1, 0, "4m"); // index of patern to play, start point, end point(bars/measures)
+
   }
 
   render() {
