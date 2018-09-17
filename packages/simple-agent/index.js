@@ -31,6 +31,10 @@ class Agent {
     require("tone").Transport.stop();
   }
 
+  pauseTransport() {
+    require("tone").Transport.pause();
+  }
+
   setBPM(bpm) {
     require("tone").Transport.bpm.value = bpm;
   }
@@ -59,7 +63,7 @@ class Agent {
     this.chords.push(
       new Event(function(time, note) {
         polySynth.triggerAttackRelease(note, "1n", time,  0.5);
-      }, chordNotes)
+      }, chordNotes)   
 
     );
   }
