@@ -3,7 +3,6 @@ const {
   Loop,
   PolySynth,
   MembraneSynth,
-  MetalSynth,
   Pattern,
   Event,
   Part
@@ -11,7 +10,6 @@ const {
 
 const polySynth = new PolySynth(8, Synth).toMaster();
 const synth = new MembraneSynth().toMaster();
-const cymbal = new MetalSynth().toMaster();
 
 class Agent {
   constructor(options) {
@@ -19,13 +17,12 @@ class Agent {
     this.loops = [];
     this.patterns = [];
     this.chords = [];
+    this.scale = ["C", "D", "E", "F", "G", "A", "B"];
   }
 
   startTransport() {
-    console.log("called from inside agent")
-      require("tone").Transport.start();
-      console.log(require("tone").Transport)
-    }
+    require("tone").Transport.start();
+  }
 
   stopTransport() {
     require("tone").Transport.stop();
@@ -39,6 +36,22 @@ class Agent {
     require("tone").Transport.bpm.value = bpm;
   }
 
+  generateIndices(quant) {
+    var indexArray = [];
+    var i;
+    for (i = 0; i < quant; i++) {
+      indexArray.push(Math.floor(Math.random() * Math.floor(7)));
+    }
+    return indexArray;
+  }
+
+  generateNotes(quant, oct) {
+    var indexArray = this.generateIndices(quant);
+    var pitchArray = indexArray.map(i => this.scale[i]);
+    var notesArray = pitchArray.map(i => i + oct);
+    return notesArray;
+  }
+
   addLoop(note, length, loopInterval) {
     this.loops.push(
       new Loop(function(time) {
@@ -47,13 +60,14 @@ class Agent {
     );
   }
 
-  addPattern(notes, order, length, rate) {
+  addPattern(quant, oct, order, length, rate) {
     this.patterns.push(
       new Pattern(
         function(time, note) {
           polySynth.triggerAttackRelease(note, length);
         },
-        notes,
+        this.generateNotes(quant, oct)
+        ,
         order
       )
     );
@@ -62,9 +76,8 @@ class Agent {
   addChord(chordNotes, length) {
     this.chords.push(
       new Event(function(time, note) {
-        polySynth.triggerAttackRelease(note, "1n", time,  0.5);
-      }, chordNotes)   
-
+        polySynth.triggerAttackRelease(note, "1n", time, 0.5);
+      }, chordNotes)
     );
   }
 
@@ -80,17 +93,6 @@ class Agent {
     this.chords[chordIndex].loop = repeats;
     this.chords[chordIndex].loopEnd = length;
     this.chords[chordIndex].start();
-  }
-
-  logTransport1() {
-    require("tone").Transport.scheduleRepeat(function(time) {
-      cymbal.triggerAttackRelease();
-    }, "4n");
-  }
-
-  logTransport2() {
-    require("tone").Transport.scheduleRepeat(function(time) {
-    }, "8n");
   }
 }
 
