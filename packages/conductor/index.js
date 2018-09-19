@@ -4,23 +4,20 @@ class Conductor {
   constructor(options) {}
 
   startTransport() {
-    console.log('hello there 1');
-    transport.start();
+  require("tone").Transport.start();
   }
 
   stopTransport() {
-    console.log('hello there 2');
-    transport.stop();
+    require("tone").Transport.stop();
   }
 
   pauseTransport() {
-    console.log('hello there 3');
-    transport.pause();
+    console.log(require("tone").Transport)
+    // require("tone").Transport.pause();
   }
 
   setBPM(bpm) {
-    console.log('hello there 4');
-    transport.bpm.value = bpm;
+    require("tone").Transport.bpm.value = bpm;
   }
 }
 
