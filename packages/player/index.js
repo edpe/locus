@@ -1,8 +1,10 @@
 class Player {
-  constructor(options) {}
+  constructor(options) {
+  }
 
   playPattern(pattern, start, end) {
-    this.patterns[pattern].start(start).stop(end);
+    console.log("Im playing a pattern right now!")
+    //this.patterns[pattern].start(start).stop(end);
   }
 
   playLoop(loop, start, end) {

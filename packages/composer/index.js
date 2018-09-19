@@ -44,7 +44,7 @@ class Composer {
     );
   }
 
-  addPattern(quant, oct, order, length, rate) {
+  makePattern(quant, oct, order, length) {
     this.patterns.push(
       new Pattern(
         function(time, note) {

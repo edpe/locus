@@ -17,20 +17,17 @@ export default class ComposerWrapper extends Component {
     return (
       <div>
         <button
-          name="make pattern"
-          alt="make pattern"
+          name="make-pattern"
           onClick={this.composer.makePattern(8, 5, "up", "8n")}
         >
           make a pattern
         </button>
         <button
-          name="view patterns"
-          alt="view patterns"
-          onClick={this.composer.viewPatterns}
+          name="view-patterns"
+          onClick={console.log("hello")}
         >
           view patterns
         </button>
-        <pre />
       </div>
     );
   }

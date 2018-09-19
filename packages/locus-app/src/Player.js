@@ -12,14 +12,14 @@ export default class PlayerWrapper extends Component {
   render() {
     return (
       <div>
-        <button
-          name="play pattern"
-          alt="make pattern"
-          onClick={this.player.playPattern(0, 0, "8m")}
-        >
-          make a pattern
-        </button>
-        <pre />
+<button
+  name="play pattern"
+  alt="play pattern"
+  onClick={this.player.playPattern(0, 0, "8m")}
+>
+  play a pattern
+</button>
+
       </div>
     );
   }

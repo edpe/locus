@@ -54,18 +54,21 @@ export default class ConductorWrapper extends Component {
             onChange={this.handleBpmChange}
           />
         </label>
-        <br />
+        <p />
+        <div>
         <button>
-          <img src={play} alt="play" onClick={this.startTransport} />
+          <img width="100px" height="100px" src={play} alt="play" onClick={this.startTransport} />
         </button>
         <button>
-          <img src={stop} alt="stop" onClick={this.stopTransport} />
+          <img width="100px" height="100px" src={stop} alt="stop" onClick={this.stopTransport} />
         </button>
         <button>
-          <img src={pause} alt="pause" onClick={this.pauseTransport} />
+          <img width="100px" height="100px" src={pause} alt="pause" onClick={this.pauseTransport} />
         </button>
+        </div>
         <pre />
       </div>
+
     );
   }
 }

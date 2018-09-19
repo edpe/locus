@@ -4,7 +4,7 @@ import stop from "./stop-button.svg";
 import pause from "./pause-button.svg";
 import Agent from "simple-agent";
 
-// pull in graphing/waveform lib
+
 export default class AgentWrapper extends Component {
   constructor(props) {
     super(props);
