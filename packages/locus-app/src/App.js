@@ -1,13 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
 
-import World from './World';
+import World from "./World";
 
 class App extends Component {
   render() {
-
     return (
       <div className="App">
         <header className="App-header">
@@ -15,8 +14,7 @@ class App extends Component {
           <h1 className="App-title">Locus</h1>
         </header>
         <World />
-        <p className="App-intro">
-        </p>
+        <p className="App-intro" />
       </div>
     );
   }

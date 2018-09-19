@@ -1,29 +1,35 @@
 import React, { Component } from "react";
+import Composer from "composer";
 
 // pull in graphing/waveform lib
-export default class AgentWrapper extends Component {
+export default class ComposerWrapper extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      length: 5,
-      order: "up",
-      octave: 4
-    };
+    this.state = {};
     this.composer = new Composer();
   }
 
-  componentDidMount() {
-    // this.agentEd.addLoop("C2", "8n", "4n"); //note, length, loop interval
-    // this.agentEd.addChord(["A2", "C3", "E3", "A3"], "16n");
-    // this.agentEd.addChord(["A3", "C4", "E4", "A4"], "16n");
-    this.agentEd.addPattern(8, 5, "up", "8n"); //notes to play, order to play them in, length of notes
-    // this.agentEd.addPattern(["C5", "G4", "E3", "C4"], "up", "4n");
+  viewPatterns() {
+    console.log(this.composer.patterns);
   }
 
   render() {
     return (
       <div>
-        // insert form here
+        <button
+          name="make pattern"
+          alt="make pattern"
+          onClick={this.composer.makePattern(8, 5, "up", "8n")}
+        >
+          make a pattern
+        </button>
+        <button
+          name="view patterns"
+          alt="view patterns"
+          onClick={this.composer.viewPatterns}
+        >
+          view patterns
+        </button>
         <pre />
       </div>
     );

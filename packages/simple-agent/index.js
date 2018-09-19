@@ -60,7 +60,7 @@ class Agent {
     );
   }
 
-  addPattern(quant, oct, order, length, rate) {
+  makePattern(quant, oct, order, length, rate) {
     this.patterns.push(
       new Pattern(
         function(time, note) {
