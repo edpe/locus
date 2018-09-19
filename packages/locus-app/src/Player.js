@@ -7,6 +7,11 @@ export default class PlayerWrapper extends Component {
     super(props);
     this.state = {};
     this.player = new Player();
+    this.patterns = props.patterns
+  }
+
+  playPattern = () => {
+    this.player.playPattern(this.patterns, 0, "8m")
   }
 
   render() {
@@ -15,7 +20,7 @@ export default class PlayerWrapper extends Component {
 <button
   name="play pattern"
   alt="play pattern"
-  onClick={this.player.playPattern(0, 0, "8m")}
+  onClick={this.playPattern}
 >
   play a pattern
 </button>
