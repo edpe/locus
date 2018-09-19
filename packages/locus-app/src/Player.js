@@ -5,13 +5,11 @@ import Player from "player";
 export default class PlayerWrapper extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
     this.player = new Player();
-    this.patterns = props.patterns
   }
 
   playPattern = () => {
-    this.player.playPattern(this.patterns, 0, "8m")
+    this.player.playPattern(this.props.patterns, 0)
   }
 
   render() {

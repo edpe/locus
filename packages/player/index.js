@@ -3,9 +3,9 @@ class Player {
     this.patterns = []
   }
 
-  playPattern(patterns, patternIndex, end) {
+  playPattern(patterns, patternIndex) {
     console.log(patterns[patternIndex])
-    patterns[patternIndex].start().stop(end);
+    patterns[patternIndex].start();
   }
 
   playLoop(loop, start, end) {

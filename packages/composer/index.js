@@ -15,7 +15,6 @@ class Composer {
   constructor(options) {
     this.instrument = polySynth;
     this.loops = [];
-    this.patterns = [];
     this.chords = [];
     this.scale = ["C", "D", "E", "F", "G", "A", "B"];
   }
@@ -45,14 +44,12 @@ class Composer {
   }
 
   makePattern(quant, oct, order, length) {
-    this.patterns.push(
-      new Pattern(
-        function(time, note) {
-          polySynth.triggerAttackRelease(note, length);
-        },
-        this.generateNotes(quant, oct),
-        order
-      )
+    return new Pattern(
+      function(time, note) {
+        polySynth.triggerAttackRelease(note, length);
+      },
+      this.generateNotes(quant, oct),
+      order
     );
   }
 

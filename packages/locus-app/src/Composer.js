@@ -6,18 +6,20 @@ import Player from "./Player";
 export default class ComposerWrapper extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {patterns: []};
     this.composer = new Composer();
-    this.patterns = this.composer.patterns
 
   }
 
   viewPatterns = () => {
-    console.log(this.patterns);
+    console.log(this.state.patterns);
   };
 
   addPattern = () => {
-    this.composer.makePattern(8, 5, "up", "8n");
+    const patternToPush = this.composer.makePattern(8, 5, "up", "8n");
+    var nextPatterns = this.state.patterns;
+    nextPatterns.push(patternToPush)
+    this.setState({patterns: nextPatterns});
   };
 
   render() {
@@ -25,8 +27,9 @@ export default class ComposerWrapper extends Component {
       <div>
         <button onClick={this.addPattern}>make a pattern</button>
         <button onClick={this.viewPatterns}>view patterns</button>
+        <p />
         <div>
-          <Player patterns={this.patterns}/>
+          <Player patterns={this.state.patterns}/>
         </div>
       </div>
 

@@ -4,7 +4,7 @@ import stop from "./stop-button.svg";
 import pause from "./pause-button.svg";
 import Conductor from "conductor";
 
-// pull in graphing/waveform lib
+
 export default class ConductorWrapper extends Component {
   constructor(props) {
     super(props);
@@ -37,8 +37,6 @@ export default class ConductorWrapper extends Component {
     this.conductor.setBPM(this.state.bpm);
   }
 
-  componentDidMount() {
-  }
 
   render() {
     return (
