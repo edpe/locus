@@ -31,10 +31,6 @@ export default class ConductorWrapper extends Component {
     this.conductor.setBPM(this.state.bpm);
   };
 
-  componentDidMount() {
-    console.log("in conductor", this.props.transport)
-  }
-
   render() {
     return (
       <div>
