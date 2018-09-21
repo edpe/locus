@@ -4,7 +4,8 @@ class Composer {
     this.chords = [];
     this.scale = ["C", "D", "E", "F", "G", "A", "B"];
     this.tone = tone;
-    this.polySynth = new tone.PolySynth(8, tone.Synth).toMaster();
+    this.reverb = new tone.Freeverb(0.7, 3000)
+    this.polySynth = new tone.PolySynth(8, tone.Synth).connect(this.reverb).toMaster();
     this.synth = new tone.MembraneSynth().toMaster();
   }
 
