@@ -7,7 +7,7 @@ import Conductor from "conductor";
 export default class ConductorWrapper extends Component {
   constructor(props) {
     super(props);
-    this.state = { bpm: 120 };
+    this.state = { bpm: 100 };
     this.conductor = new Conductor(this.props.transport);
   }
 

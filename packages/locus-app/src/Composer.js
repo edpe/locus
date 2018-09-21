@@ -14,7 +14,7 @@ export default class ComposerWrapper extends Component {
   };
 
   addPattern = () => {
-    const patternToPush = this.composer.makePattern(8, 3, "up", "8n", 2); //number of notes, octave, notes order, number of bars to play for, playback rate
+    const patternToPush = this.composer.makePattern(8, 3, "up", "4n", 2); //number of notes, octave, notes order, number of bars to play for, playback rate
     var nextPatterns = this.state.patterns;
     nextPatterns.push(patternToPush)
     this.setState({patterns: nextPatterns});
