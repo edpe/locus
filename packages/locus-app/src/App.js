@@ -1,22 +1,33 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import Tone from "tone";
 
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
 
-import Agent from './Agent';
+import Conductor from "./Conductor";
+import Composer from "./Composer";
 
 class App extends Component {
-  render() {
+  constructor(props) {
+    super(props);
+    this.tone = Tone;
+    this.state = {};
+  }
 
+  componentDidMount() {
+    console.log(this.tone.Transport);
+  }
+
+  render() {
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Locus</h1>
         </header>
-        <Agent />
-        <p className="App-intro">
-        </p>
+        <Conductor transport={this.tone.Transport} />
+        <Composer tone={this.tone} />
+        <p className="App-intro" />
       </div>
     );
   }
