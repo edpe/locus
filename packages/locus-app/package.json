@@ -6,6 +6,7 @@
     "react": "16.4.2",
     "react-dom": "16.4.2",
     "react-scripts": "1.1.5",
+    "tone": "0.12.80",
     "conductor": "1.0.0",
     "composer": "1.0.0",
     "player": "1.0.0"
