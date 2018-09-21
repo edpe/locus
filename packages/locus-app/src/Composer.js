@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Composer from "composer";
 import Player from "./Player";
 
-// pull in graphing/waveform lib
 export default class ComposerWrapper extends Component {
   constructor(props) {
     super(props);
@@ -35,4 +34,3 @@ export default class ComposerWrapper extends Component {
     );
   }
 }
-// this.props.synth, this.props.polySynth, this.props.membraneSynth, this.props.loop, this.props.pattern, this.props.toneEvent

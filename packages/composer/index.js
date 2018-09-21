@@ -4,9 +4,8 @@ class Composer {
     this.chords = [];
     this.scale = ["C", "D", "E", "F", "G", "A", "B"];
     this.tone = tone;
-
-    const polySynth = new tone.PolySynth(8, tone.Synth).toMaster();
-    const synth = new tone.MembraneSynth().toMaster();
+    this.polySynth = new tone.PolySynth(8, tone.Synth).toMaster();
+    this.synth = new tone.MembraneSynth().toMaster();
   }
 
   generateIndices(quant) {
@@ -28,16 +27,14 @@ class Composer {
   addLoop(note, length, loopInterval) {
     this.loops.push(
       new this.tone.Loop(function(time) {
-        synth.triggerAttackRelease(note, length, time, 0.5);
+        this.synth.triggerAttackRelease(note, length, time, 0.5);
       }, loopInterval)
     );
   }
 
   makePattern(quant, oct, order, length) {
     return new this.tone.Pattern(
-      function(time, note) {
-        polySynth.triggerAttackRelease(note, length);
-      },
+      (time, note) => this.polySynth.triggerAttackRelease(note, length),
       this.generateNotes(quant, oct),
       order
     );
@@ -46,7 +43,7 @@ class Composer {
   addChord(chordNotes, length) {
     this.chords.push(
       new this.tone.Event(function(time, note) {
-        polySynth.triggerAttackRelease(note, "1n", time, 0.5);
+        this.polySynth.triggerAttackRelease(note, "1n", time, 0.5);
       }, chordNotes)
     );
   }
