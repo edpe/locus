@@ -1,23 +1,25 @@
-const transport = require("tone").Transport;
-
 class Conductor {
-  constructor(options) {}
+  constructor(transport) {
+    this.transport = transport;
+  }
 
   startTransport() {
-  require("tone").Transport.start();
+    this.transport.start();
+    console.log(this.transport.state);
   }
 
   stopTransport() {
-    require("tone").Transport.stop();
+    this.transport.stop();
+    console.log(this.transport.state);
   }
 
   pauseTransport() {
-    console.log(require("tone").Transport)
-    // require("tone").Transport.pause();
+    this.transport.pause();
+    console.log(this.transport.state);
   }
 
   setBPM(bpm) {
-    require("tone").Transport.bpm.value = bpm;
+    this.transport.bpm.value = bpm;
   }
 }
 

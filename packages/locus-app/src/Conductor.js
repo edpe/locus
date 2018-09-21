@@ -8,7 +8,7 @@ export default class ConductorWrapper extends Component {
   constructor(props) {
     super(props);
     this.state = { bpm: 120 };
-    this.conductor = new Conductor();
+    this.conductor = new Conductor(this.props.transport);
   }
 
   startTransport = () => {
@@ -30,6 +30,10 @@ export default class ConductorWrapper extends Component {
     this.setState(state => ({ bpm: value }));
     this.conductor.setBPM(this.state.bpm);
   };
+
+  componentDidMount() {
+    console.log("in conductor", this.props.transport)
+  }
 
   render() {
     return (
