@@ -8,7 +8,7 @@ class Composer {
     this.synth = new tone.MembraneSynth().toMaster();
   }
 
-  generateIndices(quant) {
+  static generateIndices(quant) {
     var indexArray = [];
     var i;
     for (i = 0; i < quant; i++) {
@@ -18,7 +18,7 @@ class Composer {
   }
 
   generateNotes(quant, oct) {
-    var indexArray = this.generateIndices(quant);
+    var indexArray = Composer.generateIndices(quant);
     var pitchArray = indexArray.map(i => this.scale[i]);
     var notesArray = pitchArray.map(i => i + oct);
     return notesArray;
@@ -32,12 +32,14 @@ class Composer {
     );
   }
 
-  makePattern(quant, oct, order, length) {
-    return new this.tone.Pattern(
+  makePattern(quant, oct, order, length, playbackRate) {
+    var newPattern = new this.tone.Pattern(
       (time, note) => this.polySynth.triggerAttackRelease(note, length),
       this.generateNotes(quant, oct),
       order
     );
+    newPattern.playbackRate = playbackRate;
+    return newPattern;
   }
 
   addChord(chordNotes, length) {
