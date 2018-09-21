@@ -7,8 +7,7 @@ export default class ComposerWrapper extends Component {
   constructor(props) {
     super(props);
     this.state = {patterns: []};
-    this.composer = new Composer();
-
+    this.composer = new Composer(this.props.tone);
   }
 
   viewPatterns = () => {
@@ -36,3 +35,4 @@ export default class ComposerWrapper extends Component {
     );
   }
 }
+// this.props.synth, this.props.polySynth, this.props.membraneSynth, this.props.loop, this.props.pattern, this.props.toneEvent

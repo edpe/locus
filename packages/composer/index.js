@@ -1,22 +1,12 @@
-const {
-  Synth,
-  Loop,
-  PolySynth,
-  MembraneSynth,
-  Pattern,
-  Event,
-  Part
-} = require("tone");
-
-const polySynth = new PolySynth(8, Synth).toMaster();
-const synth = new MembraneSynth().toMaster();
-
 class Composer {
-  constructor(options) {
-    this.instrument = polySynth;
+  constructor(tone) {
     this.loops = [];
     this.chords = [];
     this.scale = ["C", "D", "E", "F", "G", "A", "B"];
+    this.tone = tone;
+
+    const polySynth = new tone.PolySynth(8, tone.Synth).toMaster();
+    const synth = new tone.MembraneSynth().toMaster();
   }
 
   generateIndices(quant) {
@@ -37,14 +27,14 @@ class Composer {
 
   addLoop(note, length, loopInterval) {
     this.loops.push(
-      new Loop(function(time) {
+      new this.tone.Loop(function(time) {
         synth.triggerAttackRelease(note, length, time, 0.5);
       }, loopInterval)
     );
   }
 
   makePattern(quant, oct, order, length) {
-    return new Pattern(
+    return new this.tone.Pattern(
       function(time, note) {
         polySynth.triggerAttackRelease(note, length);
       },
@@ -55,7 +45,7 @@ class Composer {
 
   addChord(chordNotes, length) {
     this.chords.push(
-      new Event(function(time, note) {
+      new this.tone.Event(function(time, note) {
         polySynth.triggerAttackRelease(note, "1n", time, 0.5);
       }, chordNotes)
     );

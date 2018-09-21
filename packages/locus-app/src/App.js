@@ -7,20 +7,15 @@ import "./App.css";
 import Conductor from "./Conductor";
 import Composer from "./Composer";
 
-
-
 class App extends Component {
   constructor(props) {
     super(props);
-    this.tone = Tone
-    this.state = { };
-
-
-
+    this.tone = Tone;
+    this.state = {};
   }
 
   componentDidMount() {
-    console.log(this.tone.Transport)
+    console.log(this.tone.Transport);
   }
 
   render() {
@@ -30,8 +25,8 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Locus</h1>
         </header>
-        <Conductor transport={this.tone.Transport}/>
-        <Composer />
+        <Conductor transport={this.tone.Transport} />
+        <Composer tone={this.tone} />
         <p className="App-intro" />
       </div>
     );
