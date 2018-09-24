@@ -1,11 +1,12 @@
 class Player {
   constructor(options) {
-    this.patterns = []
+    this.patterns = [];
   }
 
   playPattern(patterns, patternIndex) {
-    patterns[patternIndex].start().stop("16m");
-    console.log(patterns[patternIndex])
+    patterns.length > 0
+      ? patterns[patternIndex].start().stop("16m")
+      : alert("please make a pattern before playing it");
   }
 
   playLoop(loop, start, end) {
