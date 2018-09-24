@@ -19,7 +19,7 @@ export default class PlayerWrapper extends Component {
     this.player.stopPattern(this.props.patterns, this.state.currentPattern);
     let newCurrentPattern;
 
-    this.state.currentPattern <= this.props.patterns.length
+    this.state.currentPattern < this.props.patterns.length - 1
       ? (newCurrentPattern = this.state.currentPattern + 1)
       : (newCurrentPattern = 0);
 
