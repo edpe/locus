@@ -5,6 +5,7 @@ class Player {
 
   playPattern(patterns, patternIndex) {
     patterns[patternIndex].start().stop("16m");
+    console.log(patterns[patternIndex])
   }
 
   playLoop(loop, start, end) {
