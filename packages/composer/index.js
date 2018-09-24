@@ -4,8 +4,8 @@ class Composer {
     this.chords = [];
     this.scale = ["C", "D", "E", "F", "G", "A", "B"];
     this.tone = tone;
-    this.reverb = new tone.Freeverb(0.7, 3000)
-    this.polySynth = new tone.PolySynth(8, tone.Synth).connect(this.reverb).toMaster();
+    this.fbDelay = new tone.FeedbackDelay("16n", 0.4).toMaster();
+    this.polySynth = new tone.PolySynth(8, tone.Synth).connect(this.fbDelay);
     this.synth = new tone.MembraneSynth().toMaster();
   }
 
@@ -28,7 +28,7 @@ class Composer {
   addLoop(note, length, loopInterval) {
     this.loops.push(
       new this.tone.Loop(function(time) {
-        this.synth.triggerAttackRelease(note, length, time, 0.5);
+        this.synth.triggerAttackRelease(note, length, time);
       }, loopInterval)
     );
   }
