@@ -9,6 +9,12 @@ class Player {
       : alert("please make a pattern before playing it");
   }
 
+  stopPattern(patterns, patternIndex) {
+    patterns.length > 0
+      ? patterns[patternIndex].stop()
+      : alert("please make a pattern before playing it");
+  }
+
   playLoop(loop, start, end) {
     this.loops[loop].start(start).stop(end);
   }
