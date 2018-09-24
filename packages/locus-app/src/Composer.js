@@ -6,7 +6,8 @@ export default class ComposerWrapper extends Component {
   constructor(props) {
     super(props);
     this.state = {patterns: []};
-    this.composer = new Composer(this.props.tone);
+    this.composer = new Composer(this.props.tone, this.props.role);
+
   }
 
   viewPatterns = () => {
@@ -14,11 +15,14 @@ export default class ComposerWrapper extends Component {
   };
 
   addPattern = () => {
-    const patternToPush = this.composer.makePattern(8, 3, "up", "32n", 2); //number of notes, octave, notes order, number of bars to play for, playback rate
+    const patternToPush = this.composer.makePattern(); //number of notes, octave, notes order, note length, playback rate
     var nextPatterns = this.state.patterns;
     nextPatterns.push(patternToPush)
     this.setState({patterns: nextPatterns});
   };
+
+  componentDidMount() {
+  }
 
   render() {
     return (
