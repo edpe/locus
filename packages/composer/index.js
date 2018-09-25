@@ -41,7 +41,7 @@ class Composer {
   makePattern(role) {
     var newPattern = new this.tone.Pattern(
       (time, note) =>
-        this.squareSynth.triggerAttackRelease(note, this.role.noteLength),
+        this.squareSynth.triggerAttackRelease(note, this.role.noteLength, time, 0.5),
       this.generateNotes(this.role.noteAmount, this.role.octave),
       this.role.order
     );

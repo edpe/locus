@@ -33,7 +33,7 @@ class App extends Component {
       },
       bass: {
         name: "bass",
-        noteAmount: 2,
+        noteAmount: 3,
         octave: 2,
         order: "up",
         noteLength: "1n",
