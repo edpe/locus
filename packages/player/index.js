@@ -5,7 +5,7 @@ class Player {
 
   playPattern(patterns, patternIndex) {
     patterns.length > 0
-      ? patterns[patternIndex].start().stop("16m")
+      ? patterns[patternIndex].start().stop("64m")
       : alert("please make a pattern before playing it");
   }
 

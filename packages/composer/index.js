@@ -6,9 +6,20 @@ class Composer {
     this.fbDelay = new tone.FeedbackDelay("16n", 0.7).toMaster();
     this.polySynth = new tone.PolySynth({
       polyphony: 8,
-      voice: tone.synth
+      voice: this.synth
     }).connect(this.fbDelay);
-    this.synth = new tone.MembraneSynth().toMaster();
+    this.squareSynth = new tone.Synth({
+      oscillator: {
+        type: "square4",
+
+      },
+      envelope: {
+        attack: 2,
+        decay: 0.1,
+        sustain: 0.1,
+        release: 2
+      }
+    }).toMaster();
   }
 
   static generateIndices(quant) {
@@ -30,11 +41,12 @@ class Composer {
   makePattern(role) {
     var newPattern = new this.tone.Pattern(
       (time, note) =>
-        this.polySynth.triggerAttackRelease(note, this.role.noteLength),
+        this.squareSynth.triggerAttackRelease(note, this.role.noteLength),
       this.generateNotes(this.role.noteAmount, this.role.octave),
       this.role.order
     );
     newPattern.playbackRate = this.role.playbackRate;
+    newPattern.probability = this.role.presence;
     return newPattern;
   }
 }

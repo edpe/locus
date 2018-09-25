@@ -16,10 +16,11 @@ class App extends Component {
       melody: {
         name: "melody",
         noteAmount: 8,
-        octave: 6,
+        octave: 5,
         order: "up",
-        noteLength: "32n",
-        playbackRate: 2
+        noteLength: "8n",
+        playbackRate: 1,
+        presence: 0.5
       },
       counterMelody: {
         name: "counterMelody",
@@ -27,7 +28,8 @@ class App extends Component {
         octave: 4,
         order: "up",
         noteLength: "8n",
-        playbackRate: 1
+        playbackRate: 1,
+        presence: 0.5
       },
       bass: {
         name: "bass",
@@ -35,7 +37,8 @@ class App extends Component {
         octave: 2,
         order: "up",
         noteLength: "1n",
-        playbackRate: 0.25
+        playbackRate: 0.25,
+        presence: 1
       }
     };
   }
