@@ -20,7 +20,7 @@ class App extends Component {
         order: "up",
         noteLength: "8n",
         playbackRate: 1,
-        probability: 0.5
+        presence: 0.5
       },
       counterMelody: {
         name: "counterMelody",
@@ -29,7 +29,7 @@ class App extends Component {
         order: "up",
         noteLength: "8n",
         playbackRate: 1,
-        probability: 0.5
+        presence: 0.5
       },
       bass: {
         name: "bass",
@@ -38,7 +38,7 @@ class App extends Component {
         order: "up",
         noteLength: "1n",
         playbackRate: 0.25,
-        probability: 1
+        presence: 1
       }
     };
   }

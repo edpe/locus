@@ -46,7 +46,7 @@ class Composer {
       this.role.order
     );
     newPattern.playbackRate = this.role.playbackRate;
-    newPattern.probability = this.role.probability;
+    newPattern.probability = this.role.presence;
     return newPattern;
   }
 }
