@@ -4,14 +4,10 @@ class Composer {
     this.tone = tone;
     this.role = role;
     this.fbDelay = new tone.FeedbackDelay("16n", 0.7).toMaster();
-    this.polySynth = new tone.PolySynth({
-      polyphony: 8,
-      voice: this.synth
-    }).connect(this.fbDelay);
+
     this.squareSynth = new tone.Synth({
       oscillator: {
-        type: "square4",
-
+        type: "square4"
       },
       envelope: {
         attack: 2,
@@ -20,19 +16,34 @@ class Composer {
         release: 2
       }
     }).toMaster();
+    this.polySynth = new tone.PolySynth({
+      polyphony: 8,
+      voice: this.synth
+    }).connect(this.fbDelay);
   }
 
-  static generateIndices(quant) {
+  //generates an array of random numbers of length x
+  static generateIndices(length) {
     var indexArray = [];
     var i;
-    for (i = 0; i < quant; i++) {
+    for (i = 0; i < length; i++) {
       indexArray.push(Math.floor(Math.random() * Math.floor(7)));
     }
     return indexArray;
   }
 
-  generateNotes(quant, oct) {
-    var indexArray = Composer.generateIndices(quant);
+  generateVelocities(velocity, deviation) {
+    var indexArray = [];
+    var i;
+    for (i = 0; i < 7; i++) {
+      indexArray.push(velocity + ((Math.random() - 0.5) * deviation));
+    }
+    return indexArray[Math.floor(Math.random() * indexArray.length)];
+  }
+
+  // selects notes from the scale using indices from generateIndices
+  generateNotes(length, oct) {
+    var indexArray = Composer.generateIndices(length);
     var pitchArray = indexArray.map(i => this.scale[i]);
     var notesArray = pitchArray.map(i => i + oct);
     return notesArray;
@@ -41,7 +52,12 @@ class Composer {
   makePattern(role) {
     var newPattern = new this.tone.Pattern(
       (time, note) =>
-        this.squareSynth.triggerAttackRelease(note, this.role.noteLength),
+        this.polySynth.triggerAttackRelease(
+          note,
+          this.role.noteLength,
+          time,
+          this.generateVelocities(this.role.velocity, this.role.velocityDeviation)
+        ),
       this.generateNotes(this.role.noteAmount, this.role.octave),
       this.role.order
     );
