@@ -44,7 +44,7 @@ class App extends Component {
         playbackRate: 0.25,
         presence: 1,
         velocity: 0.5,
-        velocityDeviation: 1.
+        velocityDeviation: .2
       }
     };
   }
