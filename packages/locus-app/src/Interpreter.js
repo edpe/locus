@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import Composer from "composer";
+import Interpreter from "interpreter";
 import Player from "./Player";
 
-export default class ComposerWrapper extends Component {
+export default class InterpreterWrapper extends Component {
   constructor(props) {
     super(props);
     this.state = {patterns: []};
-    this.composer = new Composer(this.props.tone, this.props.role);
+    this.interpreter = new Interpreter(this.props.tone, this.props.role);
 
   }
 
@@ -14,8 +14,8 @@ export default class ComposerWrapper extends Component {
     console.log(this.state.patterns);
   };
 
-  addPattern = () => {
-    const patternToPush = this.composer.makePattern(); //number of notes, octave, notes order, note length, playback rate
+  addInterpretedPattern = () => {
+    const patternToPush = this.interpreter.makeInterpretedPattern(); //number of notes, octave, notes order, note length, playback rate
     var nextPatterns = this.state.patterns;
     nextPatterns.push(patternToPush)
     this.setState({patterns: nextPatterns});
@@ -27,7 +27,7 @@ export default class ComposerWrapper extends Component {
   render() {
     return (
       <div>
-        <button onClick={this.addPattern}>make a pattern</button>
+        <button onClick={this.addInterpretedPattern}>make a pattern</button>
         <button onClick={this.viewPatterns}>view patterns</button>
         <p />
         <div>

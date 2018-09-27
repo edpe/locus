@@ -1,6 +1,7 @@
-class Composer {
+class Improviser {
   constructor(tone, role) {
     this.scale = ["C", "G", "E", "F", "A", "D", "B"];
+    this.rhythm = ["4n", "8n", "64n", "4n"]
     this.noteLengths = [
       "64t",
       "64n",
@@ -45,8 +46,8 @@ class Composer {
   }
 
   //generates an array of random numbers of length x
-  static generateIndices(length) {
-    var indexArray = []; // pull in graphing/waveform lib
+  static generateImprovisedIndices(length) {
+    var indexArray = [];
     var i;
     for (i = 0; i < length; i++) {
       indexArray.push(Math.floor(Math.random() * 7));
@@ -54,7 +55,7 @@ class Composer {
     return indexArray;
   }
 
-  generateVelocities(velocity, deviation) {
+  generateImprovisedVelocities(velocity, deviation) {
     var indexArray = [];
     var i;
     for (i = 0; i < 7; i++) {
@@ -63,40 +64,39 @@ class Composer {
     return indexArray[Math.floor(Math.random() * indexArray.length)];
   }
 
-  generateNoteLength(lengthIndex, deviation) {
+  generateImprovisedNoteLength(lengthIndex, deviation) {
     var devMin = 1 - deviation;
     var devMax = 1 + deviation;
     var rangedRandom = Math.floor(
       lengthIndex * (devMin + (Math.random() * (devMax - devMin)))
     );
-    console.log(this.noteLengths[rangedRandom])
     return this.noteLengths[rangedRandom];
   }
 
   // selects notes from the scale using indices from generateIndices
-  generateNotes(length, oct) {
-    var indexArray = Composer.generateIndices(length);
+  generateImprovisedNotes(length, oct) {
+    var indexArray = Improviser.generateRandomIndices(length);
     var pitchArray = indexArray.map(i => this.scale[i]);
     var notesArray = pitchArray.map(i => i + oct);
     return notesArray;
   }
 
-  makePattern(role) {
+  makeImprovisedPattern(role) {
     var newPattern = new this.tone.Pattern(
       (time, note) =>
         this.polySynth.triggerAttackRelease(
           note,
-          this.generateNoteLength(
+          this.generateImprovisedNoteLength(
             this.role.noteLength,
             this.role.noteLengthDeviation
           ),
           time,
-          this.generateVelocities(
+          this.generateImprovisedVelocities(
             this.role.velocity,
             this.role.velocityDeviation
           )
         ),
-      this.generateNotes(this.role.noteAmount, this.role.octave),
+      this.generateImprovisedNotes(this.role.noteAmount, this.role.octave),
       this.role.order
     );
     newPattern.playbackRate = this.role.playbackRate;
@@ -105,4 +105,4 @@ class Composer {
   }
 }
 
-module.exports = Composer;
+module.exports = Improviser;

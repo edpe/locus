@@ -8,7 +8,8 @@
     "react-scripts": "1.1.5",
     "tone": "0.12.80",
     "conductor": "1.0.0",
-    "composer": "1.0.0",
+    "improviser": "1.0.0",
+    "interpreter": "1.0.0",
     "player": "1.0.0"
 
   },

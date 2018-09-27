@@ -5,7 +5,8 @@ import logo from "./logo.svg";
 import "./App.css";
 
 import Conductor from "./Conductor";
-import Composer from "./Composer";
+import Improviser from "./Improviser";
+import Interpreter from "./Interpreter";
 
 class App extends Component {
   constructor(props) {
@@ -60,12 +61,20 @@ class App extends Component {
           <h1 className="App-title">Locus</h1>
         </header>
         <Conductor transport={this.tone.Transport} />
+        <h2>Improviser</h2>
         <p>{this.roles.melody.name}</p>
-        <Composer tone={this.tone} role={this.roles.melody} />
+        <Improviser tone={this.tone} role={this.roles.melody} />
         <p>{this.roles.counterMelody.name}</p>
-        <Composer tone={this.tone} role={this.roles.counterMelody}/>
+        <Improviser tone={this.tone} role={this.roles.counterMelody}/>
         <p>{this.roles.bass.name}</p>
-        <Composer tone={this.tone} role={this.roles.bass}/>
+        <Improviser tone={this.tone} role={this.roles.bass}/>
+        <h2>Interpreter</h2>
+        <p>{this.roles.melody.name}</p>
+        <Interpreter tone={this.tone} role={this.roles.melody} />
+        <p>{this.roles.counterMelody.name}</p>
+        <Interpreter tone={this.tone} role={this.roles.counterMelody}/>
+        <p>{this.roles.bass.name}</p>
+        <Interpreter tone={this.tone} role={this.roles.bass}/>
         <p className="App-intro" />
       </div>
     );
