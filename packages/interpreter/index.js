@@ -1,5 +1,6 @@
 class Interpreter {
-  constructor(tone, role) {
+  constructor(tone, role, song) {
+    this.song = song;
     this.scale = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
     this.seed = [{ time : "0:0:0", note : 'C4', dur : '1n'},
 	{ time : '1:0:0', note : 'D4', dur : '1n'},

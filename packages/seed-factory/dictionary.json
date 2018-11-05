@@ -33,6 +33,16 @@
       "notes": [0, 0, 2, 4, 9, 9, 11]
     }
   ],
+  "timesOfDay": {
+    "night": "locrian",
+    "earlyMorning": "pentatonic",
+    "lateMorning": "ionian",
+    "midday": "myxolydian",
+    "earlyAfternoon": "phrygian",
+    "lateAfternoon": "dorian",
+    "earlyEvening": "aeolian",
+    "lateEvening": "lydian"
+  },
   "chromaticScale": [
     {
       "_id": "flats",

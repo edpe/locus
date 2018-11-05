@@ -12,6 +12,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.tone = Tone;
+    this.song = "Aenea";
     this.state = {};
     this.roles = {
       melody: {
@@ -70,11 +71,11 @@ class App extends Component {
         <Improviser tone={this.tone} role={this.roles.bass}/>
         <h2>Interpreter</h2>
         <p>{this.roles.melody.name}</p>
-        <Interpreter tone={this.tone} role={this.roles.melody} />
+        <Interpreter tone={this.tone} role={this.roles.melody} song={this.song}/>
         <p>{this.roles.counterMelody.name}</p>
-        <Interpreter tone={this.tone} role={this.roles.counterMelody}/>
+        <Interpreter tone={this.tone} role={this.roles.counterMelody} song={this.song}/>
         <p>{this.roles.bass.name}</p>
-        <Interpreter tone={this.tone} role={this.roles.bass}/>
+        <Interpreter tone={this.tone} role={this.roles.bass} song={this.song}/>
         <p className="App-intro" />
       </div>
     );
