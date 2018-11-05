@@ -1,6 +1,6 @@
 class Improviser {
   constructor(tone, role) {
-    this.scale = ["C", "G", "E", "F", "A", "D", "B"];
+    this.scale = ["A", "C", "E", "D", "A", "E", "C"];
     this.rhythm = ["4n", "8n", "64n", "4n"]
     this.noteLengths = [
       "64t",
@@ -75,7 +75,7 @@ class Improviser {
 
   // selects notes from the scale using indices from generateIndices
   generateImprovisedNotes(length, oct) {
-    var indexArray = Improviser.generateRandomIndices(length);
+    var indexArray = Improviser.generateImprovisedIndices(length);
     var pitchArray = indexArray.map(i => this.scale[i]);
     var notesArray = pitchArray.map(i => i + oct);
     return notesArray;
