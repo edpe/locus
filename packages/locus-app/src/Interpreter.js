@@ -14,8 +14,8 @@ export default class InterpreterWrapper extends Component {
     console.log(this.state.patterns);
   };
 
-  addInterpretedPattern = () => {
-    const patternToPush = this.interpreter.makeInterpretedPattern(); //number of notes, octave, notes order, note length, playback rate
+  renderSeedPart = () => {
+    const patternToPush = this.interpreter.renderSeed(); //number of notes, octave, notes order, note length, playback rate
     var nextPatterns = this.state.patterns;
     nextPatterns.push(patternToPush)
     this.setState({patterns: nextPatterns});
@@ -27,7 +27,7 @@ export default class InterpreterWrapper extends Component {
   render() {
     return (
       <div>
-        <button onClick={this.addInterpretedPattern}>make a pattern</button>
+        <button onClick={this.renderSeedPart}>make a pattern</button>
         <button onClick={this.viewPatterns}>view patterns</button>
         <p />
         <div>

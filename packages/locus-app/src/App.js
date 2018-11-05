@@ -40,7 +40,7 @@ class App extends Component {
       },
       bass: {
         name: "bass",
-        noteAmount: 3,
+        noteAmount: 4,
         octave: 2,
         order: "up",
         noteLength: 17,
