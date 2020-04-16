@@ -1,6 +1,19 @@
+import { useEffect } from 'react';
 import Head from 'next/head';
 
-export default function Home() {
+const Home = () => {
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // play audio on user interaction, due to Chrome policy not allowing autoplay
+      document.addEventListener('click', playAudio);
+  
+      const playAudio = () => {
+        document.getElementById('audio').play();
+        document.removeEventListener('click', playAudio);
+      };
+    }
+  }, []);
+
   return (
     <div>
       <Head>
@@ -21,7 +34,7 @@ export default function Home() {
       <main>
         <h1>Locus</h1>
 
-        <audio autoplay loop controls>
+        <audio id="audio" autoPlay loop>
           <source src="./audio/file_example_OOG_1MG.ogg" type="audio/ogg; codecs=vorbis" />
           <source src="./audio/file_example_MP3_700KB.mp3" type="audio/mpeg" />
         </audio>
@@ -136,3 +149,5 @@ export default function Home() {
     </div>
   )
 }
+
+export default Home;
