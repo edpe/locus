@@ -1,4 +1,6 @@
 const dictionary = require('./dictionary.json');
+const songs = require('./songs.json');
+const SEMITONES = 12;
 
 class SeedFactory {
   constructor(song, role) {
@@ -49,7 +51,34 @@ class SeedFactory {
   }
 
   generateScale() {
-    const tonality = dictionary.modes;
+    const tonality = dictionary.modes[this.currentScale()];
+    const transposedScale = [];
+    tonality.forEach(x => transposedScale.push(x, x + 12));
+    const sortedScale = transposedScale.sort((a, b) => a - b);
+    const scale = [];
+
+    sortedScale.forEach(index => {
+      if (index <= 11) {
+        scale.push(
+          dictionary.chromaticScale.flats[index] + this.role.octave.toString()
+        );
+      } else {
+        scale.push(
+          dictionary.chromaticScale.flats[index - 12] +
+            (this.role.octave + 1).toString()
+        );
+      }
+    });
+
+    this.scale = scale;
+  }
+
+  generateMelody() {
+    const octFactor = this.role.octave * SEMITONES;
+    const currentSong = songs.melodies[this.song];
+    this.generateScale();
+    const melody = currentSong.map(note => this.scale[note]);
+    return melody;
   }
 }
 

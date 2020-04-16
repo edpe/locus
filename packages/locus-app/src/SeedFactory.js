@@ -8,7 +8,7 @@ export default class SeedFactoryWrapper extends Component {
   }
 
   componentDidMount() {
-    console.log(this.seedFactory.currentScale())
+    console.log(this.seedFactory.generateMelody())
   }
 
   render() {
