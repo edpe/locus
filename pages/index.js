@@ -22,19 +22,14 @@ const Circle = dynamic(
   { ssr: false }
 );
 
-const CircleMarker = dynamic(
-  () => import('react-leaflet').then(module => module.CircleMarker),
-  { ssr: false }
-);
-
 // https://stackoverflow.com/a/13841047
 const getDistance = (lon1, lat1, lon2, lat2) => {
   const R = 6371; // radius of the earth in km
   const dLat = (lat2-lat1).toRad(); // Javascript functions in radians
   const dLon = (lon2-lon1).toRad(); 
   const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-          Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
-          Math.sin(dLon/2) * Math.sin(dLon/2); 
+    Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2); 
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
   const d = R * c; // distance in km
   const d2 = d * 1000; // distance in m
@@ -54,8 +49,22 @@ const destinationPosition = {
   lng: 1.301181,
 };
 
+const directionMap = {
+  A: 'top left',
+  B: 'top right',
+  C: 'bottom left',
+  D: 'bottom right',
+};
+
 const Home = () => {
   const [currentPosition, setCurrentPosition] = useState();
+  const [debugOutput, setDebugOutput] = useState({});
+
+  const withDebug = typeof window !== 'undefined' && location.search.includes('debug=1');
+  const withMockLocation = typeof window !== 'undefined' && location.search.includes('mock=1');
+
+  // meters
+  const distances = [200, 300, 400, 500, 600, 1300];
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -66,6 +75,15 @@ const Home = () => {
         document.getElementById('audio').play();
         document.removeEventListener('click', playAudio);
       };
+
+      if (!withMockLocation) {
+        window.navigator.geolocation.getCurrentPosition(({ coords }) => { 
+          setCurrentPosition({
+            lng: coords.longitude,
+            lat: coords.latitude,
+          });
+        });
+      }
     }
   }, []);
 
@@ -77,8 +95,65 @@ const Home = () => {
         destinationPosition.lng,
         destinationPosition.lat
       );
+
+      const outOfBounds = distanceTo > distances[distances.length - 1];
+
+      let debug = {
+        lng: currentPosition.lng,
+        lat: currentPosition.lat,
+        distance: distanceTo.toFixed(2) + 'm',
+      };
       
-      console.log('distanceTo', distanceTo + 'm');
+      console.group();
+      console.log('current position', currentPosition);
+      console.log('distance away', debug.distance);
+
+      const directionKey = (() => {
+        if (outOfBounds) {
+          return;
+        }
+
+        if (
+          currentPosition.lng <= destinationPosition.lng &&
+          currentPosition.lat <= destinationPosition.lat
+        ) {
+          return 'C'; // bottom left
+        } else if (
+          currentPosition.lng >= destinationPosition.lng &&
+          currentPosition.lat <= destinationPosition.lat
+        ) {
+          return 'D'; // bottom right
+        } else if (
+          currentPosition.lng <= destinationPosition.lng &&
+          currentPosition.lat >= destinationPosition.lat
+        ) {
+          return 'A'; // top left
+        }
+
+        return 'B'; // top right
+      })();
+
+      let distanceKey;
+      if (!outOfBounds) {
+        distances.some((distance, index) => {
+          if (distanceTo <= distance) {
+            distanceKey = index + 1;
+            return true;
+          }
+        });
+      }
+      
+      if (directionKey) {
+        debug.direction = directionMap[directionKey];
+        debug.key = directionKey + distanceKey;
+
+        console.log('direction', debug.direction);
+        console.log('key', debug.key);
+      }
+
+      console.groupEnd();
+
+      setDebugOutput(debug);
     }
   }, [currentPosition, destinationPosition]);
 
@@ -110,7 +185,11 @@ const Home = () => {
         <Map
           center={destinationPosition}
           zoom={16}
-          onClick={event => setCurrentPosition(event.latlng)}
+          onClick={event => {
+            if (withMockLocation) {
+              setCurrentPosition(event.latlng);
+            }
+          }}
         >
           <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -123,7 +202,11 @@ const Home = () => {
             />
           )}
 
-          {[200, 300, 400, 500, 600].map(radius => (
+          <Marker
+            position={destinationPosition}
+          />
+
+          {distances.map(radius => (
             <Circle
               key={radius}
               center={destinationPosition}
@@ -131,11 +214,32 @@ const Home = () => {
             />
           ))}
         </Map>
+
+        {(withDebug && Object.keys(debugOutput).length) && (
+          <div className="debug">
+            {Object.entries(debugOutput).map((x, i) => (
+              <div key={i}>
+                <b>{x[0]}</b>: {x[1]}
+              </div>
+            ))}
+          </div>
+        )}
       </main>
 
       <style jsx>{`
-        :global(.leaflet-container) {
-          height: 100vh;
+        .debug {
+          position: fixed;
+          top: 0;
+          right: 0;
+          z-index: 9999;
+          padding: 20px;
+          text-align: right;
+          background: #fff;
+        }
+
+        .debug > *:nth-child(5) {
+          font-size: 1.4rem;
+          margin-top: 1em;
         }
       `}</style>
 
@@ -145,100 +249,17 @@ const Home = () => {
         *::after {
           box-sizing: border-box;
         }
-
-        /* Remove default padding */
-        ul[class],
-        ol[class] {
-          padding: 0;
-        }
-
-        /* Remove default margin */
-        body,
-        h1,
-        h2,
-        h3,
-        h4,
-        p,
-        ul[class],
-        ol[class],
-        li,
-        figure,
-        figcaption,
-        blockquote,
-        dl,
-        dd {
-          margin: 0;
-        }
-
-        :root {
-          min-height: 100%;
-        }
-
-        /* Set core body defaults */
+      
         body {
-          min-height: 100%;
           scroll-behavior: smooth;
           text-rendering: optimizeSpeed;
           line-height: 1.5;
+          font-family: Arial;
+          margin: 0;
         }
 
-        /* Remove list styles on ul, ol elements with a class attribute */
-        ul[class],
-        ol[class] {
-          list-style: none;
-        }
-
-        /* Have link and buttons be indistinguishable */
-        a,
-        button {
-          all: unset;
-          cursor: pointer;
-        }
-
-        /* Make images easier to work with */
-        img {
-          max-width: 100%;
-          display: block;
-        }
-
-        /* Natural flow and rhythm in articles by default */
-        article > * + * {
-          margin-top: 1em;
-        }
-
-        /* Inherit fonts for inputs and buttons */
-        input,
-        button,
-        textarea,
-        select {
-          font: inherit;
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-          font: inherit;
-        }
-
-        [hidden] {
-          display: none;
-        }
-
-        [inert] {
-          opacity: 0.25;
-        }
-
-        /* Remove all animations and transitions for people that prefer not to see them */
-        @media (prefers-reduced-motion: reduce) {
-          * {
-            animation-duration: 0.01ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: 0.01ms !important;
-            scroll-behavior: auto !important;
-          }
+        .leaflet-container {
+          height: 100vh;
         }
       `}</style>
     </div>
