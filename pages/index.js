@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
+import Tone from 'tone';
+
 const Map = dynamic(
   () => import('react-leaflet').then(module => module.Map),
   { ssr: false }
@@ -189,7 +191,15 @@ const Home = () => {
             if (withMockLocation) {
               setCurrentPosition(event.latlng);
             }
-          }}
+
+            if (typeof window !== 'undefined') {
+              // create a synth and connect it to the master output (your speakers)
+              const synth = (new Tone.Synth()).toMaster();
+
+              // play a middle 'C' for the duration of an 8th note
+              synth.triggerAttackRelease('C4', '8n');
+            }}
+          }
         >
           <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
