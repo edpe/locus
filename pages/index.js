@@ -1,164 +1,44 @@
-import { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
 import Head from 'next/head';
+import Link from 'next/link';
 
-import Tone from 'tone';
-
-const Map = dynamic(
-  () => import('react-leaflet').then(module => module.Map),
-  { ssr: false }
-);
-
-const TileLayer = dynamic(
-  () => import('react-leaflet').then(module => module.TileLayer),
-  { ssr: false }
-);
-
-const Marker = dynamic(
-  () => import('react-leaflet').then(module => module.Marker),
-  { ssr: false }
-);
-
-const Circle = dynamic(
-  () => import('react-leaflet').then(module => module.Circle),
-  { ssr: false }
-);
-
-// https://stackoverflow.com/a/13841047
-const getDistance = (lon1, lat1, lon2, lat2) => {
-  const R = 6371; // radius of the earth in km
-  const dLat = (lat2-lat1).toRad(); // Javascript functions in radians
-  const dLon = (lon2-lon1).toRad(); 
-  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
-    Math.sin(dLon/2) * Math.sin(dLon/2); 
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-  const d = R * c; // distance in km
-  const d2 = d * 1000; // distance in m
-
-  return d2;
-}
-
-// converts numeric degrees to radians
-if (typeof(Number.prototype.toRad) === 'undefined') {
-  Number.prototype.toRad = function() {
-    return this * Math.PI / 180;
-  };
-}
-
-const destinationPosition = {
-  lat: 52.631920,
-  lng: 1.301181,
+const getCircumference = radius => {
+  return 2 * Math.PI * radius;
 };
 
-const directionMap = {
-  A: 'top left',
-  B: 'top right',
-  C: 'bottom left',
-  D: 'bottom right',
+const getDashOffset = (value, radius) => {
+  const circumference = getCircumference(radius);
+  const progress = value / 100;
+  const dashoffset = circumference * (1 - progress);
+  return dashoffset;
 };
+
+const Circle = ({ radius, percentage, scale = 1, rotate = 0, ...props }) => (
+  <>
+    <circle
+      className="c--value"
+      cx="60"
+      cy="60"
+      r={radius}
+      strokeWidth="12"
+      style={{
+        strokeDasharray: getCircumference(radius),
+        strokeDashoffset: getDashOffset(percentage, radius),
+      }}
+      {...props}
+    />
+
+    <style jsx>{`
+      .c--value {
+        fill: none;
+        stroke: #eeece8;
+        transform-origin: 50% 50%;
+        transform: scale(${scale}) rotate(${rotate}deg);
+      }
+    `}</style>
+  </>
+);
 
 const Home = () => {
-  const [currentPosition, setCurrentPosition] = useState();
-  const [debugOutput, setDebugOutput] = useState({});
-
-  const withDebug = typeof window !== 'undefined' && location.search.includes('debug=1');
-  const withMockLocation = typeof window !== 'undefined' && location.search.includes('mock=1');
-
-  // meters
-  const distances = [200, 300, 400, 500, 600, 1300];
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      // play audio on user interaction, due to Chrome policy not allowing autoplay
-      document.addEventListener('click', playAudio);
-  
-      const playAudio = () => {
-        document.getElementById('audio').play();
-        document.removeEventListener('click', playAudio);
-      };
-
-      if (!withMockLocation) {
-        window.navigator.geolocation.getCurrentPosition(({ coords }) => { 
-          setCurrentPosition({
-            lng: coords.longitude,
-            lat: coords.latitude,
-          });
-        });
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (currentPosition) {
-      const distanceTo = getDistance(
-        currentPosition.lng,
-        currentPosition.lat,
-        destinationPosition.lng,
-        destinationPosition.lat
-      );
-
-      const outOfBounds = distanceTo > distances[distances.length - 1];
-
-      let debug = {
-        lng: currentPosition.lng,
-        lat: currentPosition.lat,
-        distance: distanceTo.toFixed(2) + 'm',
-      };
-      
-      console.group();
-      console.log('current position', currentPosition);
-      console.log('distance away', debug.distance);
-
-      const directionKey = (() => {
-        if (outOfBounds) {
-          return;
-        }
-
-        if (
-          currentPosition.lng <= destinationPosition.lng &&
-          currentPosition.lat <= destinationPosition.lat
-        ) {
-          return 'C'; // bottom left
-        } else if (
-          currentPosition.lng >= destinationPosition.lng &&
-          currentPosition.lat <= destinationPosition.lat
-        ) {
-          return 'D'; // bottom right
-        } else if (
-          currentPosition.lng <= destinationPosition.lng &&
-          currentPosition.lat >= destinationPosition.lat
-        ) {
-          return 'A'; // top left
-        }
-
-        return 'B'; // top right
-      })();
-
-      let distanceKey;
-      if (!outOfBounds) {
-        distances.some((distance, index) => {
-          if (distanceTo <= distance) {
-            distanceKey = index + 1;
-            return true;
-          }
-        });
-      }
-      
-      if (directionKey) {
-        debug.direction = directionMap[directionKey];
-        debug.key = directionKey + distanceKey;
-
-        console.log('direction', debug.direction);
-        console.log('key', debug.key);
-      }
-
-      console.groupEnd();
-
-      setDebugOutput(debug);
-    }
-  }, [currentPosition, destinationPosition]);
-
   return (
     <div>
       <Head>
@@ -179,97 +59,144 @@ const Home = () => {
       </Head>
 
       <main>
-        <audio id="audio" autoPlay loop>
-          <source src="./audio/file_example_OOG_1MG.ogg" type="audio/ogg; codecs=vorbis" />
-          <source src="./audio/file_example_MP3_700KB.mp3" type="audio/mpeg" />
-        </audio>
+        <svg className="c" width="120" height="120" viewBox="0 0 120 120">
+          <Circle radius={54} percentage={60} rotate={-15} />
+          <Circle radius={54} percentage={40} scale={0.82} rotate={45} strokeWidth={8} />
+          <Circle radius={54} percentage={30} scale={0.72} rotate={20} strokeWidth={5} />
+          <Circle radius={54} percentage={20} scale={0.72} rotate={160} strokeWidth={5} />
+        </svg>
 
-        <Map
-          center={destinationPosition}
-          zoom={16}
-          onClick={event => {
-            if (withMockLocation) {
-              setCurrentPosition(event.latlng);
-            }
-
-            if (typeof window !== 'undefined') {
-              // create a synth and connect it to the master output (your speakers)
-              const synth = (new Tone.Synth()).toMaster();
-
-              // play a middle 'C' for the duration of an 8th note
-              synth.triggerAttackRelease('C4', '8n');
-            }}
-          }
-        >
-          <TileLayer
-            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-          />
-
-          {currentPosition && (
-            <Marker
-              position={currentPosition}
-            />
-          )}
-
-          <Marker
-            position={destinationPosition}
-          />
-
-          {distances.map(radius => (
-            <Circle
-              key={radius}
-              center={destinationPosition}
-              radius={radius}
-            />
-          ))}
-        </Map>
-
-        {(withDebug && Object.keys(debugOutput).length) && (
-          <div className="debug">
-            {Object.entries(debugOutput).map((x, i) => (
-              <div key={i}>
-                <b>{x[0]}</b>: {x[1]}
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="content">
+          <h1>Locus</h1>
+          <strong className="slogan">Soundtrack your journey</strong>
+          <p>Locus plays a personalised soundtrack that develops as you move closer to your destination. Different routes have their own unique and repeatable musical journeys, press play to begin.</p>
+          <Link href="/map">
+            <a className="button">Play</a>
+          </Link>
+        </div>
       </main>
 
       <style jsx>{`
-        .debug {
+        .c {
           position: fixed;
           top: 0;
-          right: 0;
-          z-index: 9999;
-          padding: 20px;
-          text-align: right;
-          background: #fff;
+          bottom: 0;
+          left: 50%;
+          min-height: 100vh;
+          width: auto;
+          transform: rotate(-90deg) translateY(-50%) scale(1.5);
         }
 
-        .debug > *:nth-child(5) {
-          font-size: 1.4rem;
+        @media (min-width: 768px) {
+          .c {
+            transform: rotate(-90deg) translateY(-50%) scale(1.25);
+          }
+        }
+
+        @media (min-width: 992px) {
+          .c {
+            transform: rotate(-90deg) translateY(-50%) scale(1.5);
+          }
+        }
+
+        .content {
+          position: fixed !important;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: flex-start;
+          min-width: 320px;
+          padding: 1rem;
+          overflow-y: auto;
+        }
+
+        .content > * {
+          position: relative;
+          background-color: #131013;
+        }
+
+        .slogan {
+          margin-top: .5em;
+          font-size: 0.75rem;
+        }
+
+        .content p {
           margin-top: 1em;
+        }
+
+        .button {
+          display: inline-flex;
+          margin-top: 1.5em;
+          padding: .5rem 0;
+          font-weight: bold;
+          justify-content: center;
+          align-items: center;
+          border-bottom: 4px solid #d04642;
+          letter-spacing: 1rem;
+          text-transform: uppercase;
+          transition: all .5s;
+        }
+
+        .button:hover,
+        .button:focus {
+          border-color: #fff;
         }
       `}</style>
 
       <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css?family=Darker+Grotesque&display=swap');
+
         *,
         *::before,
         *::after {
           box-sizing: border-box;
+        }
+
+        :root {
+          /* font-size: calc([minimum size] + ([maximum size] - [minimum size]) * ((100vw - [minimum viewport width]) / ([maximum viewport width] - [minimum viewport width]))); */
+          font-size: calc(25px + (30 - 20) * ((100vw - 300px) / (1600 - 300)));
         }
       
         body {
           scroll-behavior: smooth;
           text-rendering: optimizeSpeed;
           line-height: 1.5;
-          font-family: Arial;
+          font-family: 'Darker Grotesque', sans-serif;
+          font-size: 1rem;
           margin: 0;
+          color: #eeece8;
+          background-color: #131013;
         }
 
-        .leaflet-container {
-          height: 100vh;
+        p {
+          max-width: 30ch;
+        }
+
+        h1, h2, p {
+          margin: 0;
+          font-size: inherit;
+          line-height: 1;
+        }
+
+        h1 {
+          font-size: 1.5rem;
+        }
+
+        p {
+          line-height: 1.25;
+        }
+
+        a {
+          color: inherit;
+          text-decoration: none;
+        }
+
+        button {
+          all: unset;
         }
       `}</style>
     </div>
