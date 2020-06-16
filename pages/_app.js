@@ -1,6 +1,12 @@
-// import 'leaflet/dist/leaflet.css';
+import ReactGA from 'react-ga';
+import { useEffect } from 'react';
 
-// This default export is required in a new `pages/_app.js` file.
-export default function MyApp({ Component, pageProps }) {
+export default function App({ Component, pageProps }) {
+  useEffect(() => {
+    ReactGA.initialize('UA-169611539-1', {
+      debug: true
+    });
+  });
+
   return <Component {...pageProps} />
 }

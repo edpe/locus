@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-
+import ReactGA from 'react-ga';
 import Tone from 'tone';
 
 const Map = dynamic(
@@ -58,9 +58,10 @@ const directionMap = {
   D: 'bottom right',
 };
 
-const Home = () => {
+const MapPage = () => {
   const [currentPosition, setCurrentPosition] = useState();
   const [debugOutput, setDebugOutput] = useState({});
+  const [locationKey, setLocationKey] = useState();
 
   const withDebug = typeof window !== 'undefined' && location.search.includes('debug=1');
   const withMockLocation = typeof window !== 'undefined' && location.search.includes('mock=1');
@@ -69,6 +70,15 @@ const Home = () => {
   const distances = [200, 300, 400, 500, 600, 1300];
 
   useEffect(() => {
+    ReactGA.event({
+      category: 'Location',
+      action: locationKey,
+    });
+  }, [locationKey]);
+
+  useEffect(() => {
+    ReactGA.pageview('/map');
+
     if (typeof window !== 'undefined') {
       // play audio on user interaction, due to Chrome policy not allowing autoplay
       document.addEventListener('click', playAudio);
@@ -151,6 +161,8 @@ const Home = () => {
 
         console.log('direction', debug.direction);
         console.log('key', debug.key);
+
+        setLocationKey(debug.key);
       }
 
       console.groupEnd();
@@ -202,8 +214,8 @@ const Home = () => {
           }
         >
           <TileLayer
-            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
           />
 
           {currentPosition && (
@@ -276,4 +288,4 @@ const Home = () => {
   )
 }
 
-export default Home;
+export default MapPage;
