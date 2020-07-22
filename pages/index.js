@@ -56,15 +56,6 @@ const Home = () => {
         <meta name="theme-color" content="#317EFB" />
 
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossOrigin="" />
-
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-169611539-1"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-
-          gtag('config', 'UA-169611539-1');
-        </script>
       </Head>
 
       <main>
