@@ -24,20 +24,8 @@ const Circle = dynamic(
   { ssr: false }
 );
 
-// https://stackoverflow.com/a/13841047
-const getDistance = (lon1, lat1, lon2, lat2) => {
-  const R = 6371; // radius of the earth in km
-  const dLat = (lat2-lat1).toRad(); // Javascript functions in radians
-  const dLon = (lon2-lon1).toRad(); 
-  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
-    Math.sin(dLon/2) * Math.sin(dLon/2); 
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-  const d = R * c; // distance in km
-  const d2 = d * 1000; // distance in m
-
-  return d2;
-}
+// the minimum distance to a secondary location before the distance is reported
+const MIN_DISTANCE_SECONDARY = 100; // meters
 
 // converts numeric degrees to radians
 if (typeof(Number.prototype.toRad) === 'undefined') {
@@ -46,6 +34,22 @@ if (typeof(Number.prototype.toRad) === 'undefined') {
   };
 }
 
+// https://stackoverflow.com/a/13841047
+const getDistance = (lng1, lat1, lng2, lat2) => {
+  const R = 6371; // radius of the earth in km
+  const dLat = (lat2-lat1).toRad(); // Javascript functions in radians
+  const dLng = (lng2-lng1).toRad(); 
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
+    Math.sin(dLng/2) * Math.sin(dLng/2); 
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  const d = R * c; // distance in km
+  const d2 = d * 1000; // distance in m
+
+  return d2;
+}
+
+// report [A-D][1-5] e.g. "B3"
 const destinationPosition = {
   lat: 52.631920,
   lng: 1.301181,
@@ -58,10 +62,35 @@ const directionMap = {
   D: 'bottom right',
 };
 
+// Todo:
+// primary -> "locus"
+// secondary -> "sites"
+
 const MapPage = () => {
   const [currentPosition, setCurrentPosition] = useState();
   const [debugOutput, setDebugOutput] = useState({});
   const [locationKey, setLocationKey] = useState();
+
+  // report current distance from location
+  // -1 distanceTo means the location is out of range
+  const [secondaryLocations, setSecondaryLocations] = useState([
+    {
+      id: 'location-a',
+      location: {
+        lat: 52.634091698088575,
+        lng: 1.3045236883519131,
+      },
+      distanceTo: -1,
+    },
+    {
+      id: 'location-b',
+      location: {
+        lat: 52.6340265844073,
+        lng: 1.2918815680726061,
+      },
+      distanceTo: -1,
+    },
+  ]);
 
   const withDebug = typeof window !== 'undefined' && location.search.includes('debug=1');
   const withMockLocation = typeof window !== 'undefined' && location.search.includes('mock=1');
@@ -115,10 +144,34 @@ const MapPage = () => {
         lat: currentPosition.lat,
         distance: distanceTo.toFixed(2) + 'm',
       };
+
+      const nextSecondaryLocations = secondaryLocations.map(destination => {
+        const distance = getDistance(
+          currentPosition.lng,
+          currentPosition.lat,
+          destination.location.lng,
+          destination.location.lat
+        );
+
+        debug[destination.id] = (distance <= MIN_DISTANCE_SECONDARY)
+          ? distance.toFixed(2) + 'm'
+          : -1;
+
+        return {
+          ...destination,
+          distanceTo: (distance <= MIN_DISTANCE_SECONDARY)
+            ? distance.toFixed(2)
+            : -1,
+        };
+      });
       
       console.group();
       console.log('current position', currentPosition);
       console.log('distance away', debug.distance);
+      console.log('secondary locations', nextSecondaryLocations.map(({ id, distanceTo }) => ({
+        id,
+        distanceTo,
+      })));
 
       const directionKey = (() => {
         if (outOfBounds) {
@@ -167,9 +220,13 @@ const MapPage = () => {
 
       console.groupEnd();
 
+      setSecondaryLocations(nextSecondaryLocations);
       setDebugOutput(debug);
     }
-  }, [currentPosition, destinationPosition]);
+  }, [
+    currentPosition,
+    destinationPosition,
+  ]);
 
   return (
     <div>
@@ -228,6 +285,18 @@ const MapPage = () => {
             position={destinationPosition}
           />
 
+          {secondaryLocations.map(({ id, location }) => (
+            <React.Fragment key={id}>
+              <Marker
+                position={location}
+              />
+              <Circle
+                center={location}
+                radius={MIN_DISTANCE_SECONDARY}
+              />
+            </React.Fragment>
+          ))}
+
           {distances.map(radius => (
             <Circle
               key={radius}
@@ -257,11 +326,6 @@ const MapPage = () => {
           padding: 20px;
           text-align: right;
           background: #fff;
-        }
-
-        .debug > *:nth-child(5) {
-          font-size: 1.4rem;
-          margin-top: 1em;
         }
       `}</style>
 
