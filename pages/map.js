@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import ReactGA from 'react-ga';
-import Tone from 'tone';
+import { FMSynth } from 'tone';
 
 const Map = dynamic(
   () => import('react-leaflet').then(module => module.Map),
@@ -70,6 +70,14 @@ const MapPage = () => {
   const [currentPosition, setCurrentPosition] = useState();
   const [debugOutput, setDebugOutput] = useState({});
   const [locationKey, setLocationKey] = useState();
+
+  const synth = useRef(null)
+
+    useEffect(() => {
+    synth.current = new FMSynth().toMaster();
+  }, []);
+
+  const handleClick = () => synth.current.triggerAttackRelease('C4', 0.5, 0);
 
   // report current distance from location
   // -1 distanceTo means the location is out of range
@@ -248,10 +256,10 @@ const MapPage = () => {
       </Head>
 
       <main>
-        <audio id="audio" autoPlay loop>
+        {/* <audio id="audio" autoPlay loop>
           <source src="./audio/file_example_OOG_1MG.ogg" type="audio/ogg; codecs=vorbis" />
           <source src="./audio/file_example_MP3_700KB.mp3" type="audio/mpeg" />
-        </audio>
+        </audio> */}
 
         <Map
           center={destinationPosition}
@@ -262,11 +270,7 @@ const MapPage = () => {
             }
 
             if (typeof window !== 'undefined') {
-              // create a synth and connect it to the master output (your speakers)
-              const synth = (new Tone.Synth()).toMaster();
-
-              // play a middle 'C' for the duration of an 8th note
-              synth.triggerAttackRelease('C4', '8n');
+             handleClick()
             }}
           }
         >
