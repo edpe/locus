@@ -118,12 +118,16 @@ const MapPage = () => {
       };
 
       if (!withMockLocation) {
-        window.navigator.geolocation.getCurrentPosition(({ coords }) => { 
+        const watchId = window.navigator.geolocation.watchPosition(({ coords }) => {
           setCurrentPosition({
             lng: coords.longitude,
             lat: coords.latitude,
           });
         });
+
+        return () => {
+          window.navigator.geolocation.clearWatch(watchId);
+        };
       }
     }
   }, []);
